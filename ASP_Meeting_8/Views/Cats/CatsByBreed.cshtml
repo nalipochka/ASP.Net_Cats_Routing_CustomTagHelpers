@@ -1,0 +1,48 @@
+﻿@addTagHelper *, ASP_Meeting_8
+@model CatsByBreedViewModel
+@{
+    var routeData = Context.GetRouteData();
+    string? currentPage = routeData.Values["breed"]?.ToString();
+}
+
+<div class="row">
+        @*<div>
+            @foreach (BreedDTO breed in Model.Breeds)
+            {
+                <div class="col">
+                    <a asp-controller="Cats" asp-action="CatsByBreed" asp-route-breed="@breed.BreedName">@breed.BreedName</a>
+                </div>
+            }
+            <a asp-controller="Cats" asp-action="CatsByBreed" asp-route-breed="">All</a>
+        </div>*@
+    <cats-by-breed asp-action="CatsByBreed" asp-controller="Cats" breeds="@Model.Breeds" current-page="@currentPage"></cats-by-breed>
+        @foreach (CatDTO cat in Model.Cats)
+        {
+            <div class="col col-xl-3 col-lg-4 col-md-6 col-12 mb-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@cat.CatName</h5>
+                        <p class="card-text text-truncate">@cat.Description</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                @Html.DisplayNameFor(model=> model.Cats.First().Breed!.BreedName) :
+                                @cat.Breed?.BreedName
+                            </small>
+                        </p>
+                    </div>
+                    <div class="btn-group btn-group-sm mb-2">
+                        <a asp-action="Details"
+                       asp-route-id="@cat.Id"
+                       class="btn btn-outline-success">Details</a>
+                        <a asp-action="Edit"
+                       asp-route-id="@cat.Id"
+                       class="btn btn-outline-warning">Edit</a>
+                        <a asp-action="Delete"
+                       asp-route-id="@cat.Id"
+                       class="btn btn-outline-danger">Delete</a>
+                    </div>
+                    <img src="data:image/*;base64,@(Convert.ToBase64String(cat.Image!))" class="card-img-bottom" alt="@cat.CatName">
+                </div>
+            </div>
+        }
+</div>
